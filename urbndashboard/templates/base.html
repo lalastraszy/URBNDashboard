@@ -1,0 +1,69 @@
+{% load staticfiles %}
+<html ng-app="URBNDashboardApp">
+<head>
+	<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+	<link href="{% static 'bootstrap/css/bootstrap-datepicker.min.css' %}" rel="stylesheet" media="screen">
+	<link href="{% static 'bootstrap/css/bootstrap-datepicker3.min.css' %}" rel="stylesheet" media="screen">
+	<link href="{% static 'css/bar_chart.css' %}" rel="stylesheet" media="screen">
+	<script src="{% static 'd3/d3.min.js' %}"></script>
+	<script src="{% static 'jquery/jquery-2.1.4.min.js' %}"></script>
+	<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'bootstrap/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'angular/angular.min.js' %}"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+</head>
+
+<body ng-controller="dashboardController">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">URBN Dashboard</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a id="brandsDropdownMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.brand.brandCompanyDesc $} <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li ng-repeat="brand in brands"><a ng-click="chooseBrand(brand)" >{$ brand.brandCompanyDesc $}</a></li>
+						</ul>
+					</li> 
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.saleType | uppercase $} <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li ng-repeat="saleType in saleTypes"><a ng-click="chooseTypeOfSales(saleType)">{$ saleType | uppercase $}</a></li>
+						</ul>
+					</li>
+					<li>
+						<form class="navbar-form navbar-left">
+							<div class="form-group">
+								<div class="date">
+									<div class="input-group input-append date" id="datePicker">
+										<input ng-model="graphData.date" type="text" class="form-control" name="date" />
+										<span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+									</div>
+								</div>
+							</div>
+                        <form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        <h1>Hello {{name}}!</h1>
+        {% endblock %}
+    </div>
+    <div bar-chart chart-data="{$ graphData $}"></div>
+    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <p class="navbar-text navbar-right"></p>
+    </nav>
+</body>
+</html>
