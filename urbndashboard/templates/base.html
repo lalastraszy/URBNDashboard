@@ -11,9 +11,14 @@
 	<script src="{% static 'bootstrap/js/bootstrap-datepicker.min.js' %}"></script>
 	<script src="{% static 'angular/angular.min.js' %}"></script>
 	<script src="{% static 'js/app.js' %}"></script>
+	<script src="{% static 'js/controllers/dashboardControllers.js' %}"></script>
+	<script src="{% static 'js/directives/graphDirectives.js' %}"></script>
+    <script src="{% static 'js/services/dashboardServices.js' %}"></script>
+    <script src="{% static 'js/services/graphServices.js' %}"></script>
+    <script src="{% static 'js/config/config.js' %}"></script>
 </head>
 
-<body ng-controller="dashboardController">
+<body ng-controller="dashboardCtrl">
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -29,15 +34,21 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="dropdown">
-						<a id="brandsDropdownMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.brand.brandCompanyDesc $} <span class="caret"></span></a>
+						<a id="brandDropdownMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.brand.brandCompanyDesc $} <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li ng-repeat="brand in brands"><a ng-click="chooseBrand(brand)" >{$ brand.brandCompanyDesc $}</a></li>
 						</ul>
 					</li> 
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.saleType | uppercase $} <span class="caret"></span></a>
+						<a id="typeOfSalesDropdownMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.statType.type | uppercase $} <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li ng-repeat="saleType in saleTypes"><a ng-click="chooseTypeOfSales(saleType)">{$ saleType | uppercase $}</a></li>
+							<li ng-repeat="statType in statTypes"><a ng-click="chooseStatType(statType.type)">{$ statType.type | uppercase $}</a></li>
+						</ul>
+					</li>
+					<li class="dropdown" ng-show="graphData.statType.subType">
+						<a id="typeOfStatDropdownMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$ graphData.statType.subType | uppercase $} <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li ng-repeat="statSubType in getStatSubTypes(graphData.statType.type)"><a ng-click="chooseStatSubType(statSubType.statSubType)">{$ statSubType.statSubType | uppercase $}</a></li>
 						</ul>
 					</li>
 					<li>
@@ -45,7 +56,7 @@
 							<div class="form-group">
 								<div class="date">
 									<div class="input-group input-append date" id="datePicker">
-										<input ng-model="graphData.date" type="text" class="form-control" name="date" />
+										<input type="text" ng-model="graphData.date" class="form-control" name="date" />
 										<span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
 									</div>
 								</div>
